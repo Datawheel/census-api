@@ -1598,7 +1598,7 @@ def geo_parent(geoid):
 def show_specified_geo_data():
     geo_ids, child_parent_map = expand_geoids(request.qwargs.geo_ids)
 
-    max_geoids = current_app.config.get('MAX_GEOIDS_TO_SHOW', 3000)
+    max_geoids = current_app.config.get('MAX_GEOIDS_TO_SHOW', 9999999)
     if len(geo_ids) > max_geoids:
         abort(400, 'You requested %s geoids. The maximum is %s. Please contact us for bulk data.' % (len(geo_ids), max_geoids))
 
@@ -2188,7 +2188,7 @@ def show_specified_data(acs):
     if not valid_geo_ids:
         abort(400, 'None of the geo_ids specified were valid: %s' % ', '.join(requested_geo_ids))
 
-    max_geoids = current_app.config.get('MAX_GEOIDS_TO_SHOW', 1000)
+    max_geoids = current_app.config.get('MAX_GEOIDS_TO_SHOW', 9999999)
     if len(valid_geo_ids) > max_geoids:
         abort(400, 'You requested %s geoids. The maximum is %s. Please contact us for bulk data.' % (len(valid_geo_ids), max_geoids))
 
@@ -2335,7 +2335,7 @@ def download_specified_data(acs):
     except ShowDataException, e:
         abort(400, e.message)
 
-    max_geoids = current_app.config.get('MAX_GEOIDS_TO_DOWNLOAD', 1000)
+    max_geoids = current_app.config.get('MAX_GEOIDS_TO_DOWNLOAD', 9999999)
     if len(valid_geo_ids) > max_geoids:
         abort(400, 'You requested %s geoids. The maximum is %s. Please contact us for bulk data.' % (len(valid_geo_ids), max_geoids))
 
