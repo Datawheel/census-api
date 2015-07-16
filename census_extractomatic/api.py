@@ -31,10 +31,14 @@ from boto.exception import S3ResponseError
 from validation import qwarg_validate, NonemptyString, FloatRange, StringList, Bool, OneOf, Integer
 
 
+import sys
+sys.path = ['/acs/census-api'] + sys.path
+
 app = Flask(__name__)
 app.config.from_object(os.environ.get('EXTRACTOMATIC_CONFIG_MODULE', 'census_extractomatic.config.Development'))
+#app.config.from_pyfile('/acs/census-api/census_extractomatic/config.py')
 
-app.s3 = S3Connection()
+#app.s3 = S3Connection()
 
 if not app.debug:
     import logging
@@ -44,15 +48,15 @@ if not app.debug:
 
 # Allowed ACS's in "best" order (newest and smallest range preferred)
 allowed_acs = [
-    'acs2013_1yr',
-    'acs2013_3yr',
+#    'acs2007_1yr',
+#    'acs2007_3yr',
     'acs2013_5yr',
 ]
 
 ACS_NAMES = {
-    'acs2013_1yr': {'name': 'ACS 2013 1-year', 'years': '2013'},
-    'acs2013_3yr': {'name': 'ACS 2013 3-year', 'years': '2011-2013'},
-    'acs2013_5yr': {'name': 'ACS 2013 5-year', 'years': '2009-2013'},
+#    'acs2007_1yr': {'name': 'ACS 2007 1-year', 'years': '2007'},
+#    'acs2007_3yr': {'name': 'ACS 2007 3-year', 'years': '2005-2007'},
+    'acs2013_5yr': {'name': 'ACS 2013 5-year', 'years':'2009-2013'},
 }
 
 PARENT_CHILD_CONTAINMENT = {
@@ -164,7 +168,7 @@ supported_formats = {
     'csv':      {"type": "ogr", "driver": "CSV"},
 }
 
-def get_from_cache(cache_key, try_s3=True):
+def get_from_cache(cache_key, try_s3=False):
     # Try memcache first
     cached = g.cache.get(cache_key)
 
